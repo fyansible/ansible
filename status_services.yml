@@ -77,6 +77,50 @@
         msg: "MySQL is {{ 'active' if 'Active: active' in mysql_status.stdout else 'not active' }}"
       when: mysql_status is defined
 
+    - name: Check PostgreSQL service status
+      command: systemctl status postgresql
+      ignore_errors: true
+      register: postgres_status
+      failed_when: postgres_status.rc not in [0, 3, 4]
+
+    - name: Print PostgreSQL status
+      debug:
+        msg: "PostgreSQL is {{ 'active' if 'Active: active' in postgres_status.stdout else 'not active' }}"
+      when: postgres_status is defined
+
+    - name: Check MongoDB service status
+      command: systemctl status mongod
+      ignore_errors: true
+      register: mongodb_status
+      failed_when: mongodb_status.rc not in [0, 3, 4]
+
+    - name: Print MongoDB status
+      debug:
+        msg: "MongoDB is {{ 'active' if 'Active: active' in mongodb_status.stdout else 'not active' }}"
+      when: mongodb_status is defined
+
+    - name: Check Redis service status
+      command: systemctl status redis
+      ignore_errors: true
+      register: redis_status
+      failed_when: redis_status.rc not in [0, 3, 4]
+
+    - name: Print Redis status
+      debug:
+        msg: "Redis is {{ 'active' if 'Active: active' in redis_status.stdout else 'not active' }}"
+      when: redis_status is defined
+
+    - name: Check MariaDB service status
+      command: systemctl status mariadb
+      ignore_errors: true
+      register: mariadb_status
+      failed_when: mariadb_status.rc not in [0, 3, 4]
+
+    - name: Print MariaDB status
+      debug:
+        msg: "MariaDB is {{ 'active' if 'Active: active' in mariadb_status.stdout else 'not active' }}"
+      when: mariadb_status is defined
+
 # Monitoring services
     - name: Check Prometheus service status
       command: systemctl status prometheus
@@ -91,6 +135,50 @@
         msg: "Prometheus is {{ 'active' if 'Active: active' in prometheus_status.stdout else 'not active' }}"
       when: prometheus_status is defined
 
+    - name: Check Nagios service status
+      command: systemctl status nagios
+      ignore_errors: true
+      register: nagios_status
+      failed_when: nagios_status.rc not in [0, 3, 4]
+
+    - name: Print Nagios status
+      debug:
+        msg: "Nagios is {{ 'active' if 'Active: active' in nagios_status.stdout else 'not active' }}"
+      when: nagios_status is defined
+
+    - name: Check Zabbix service status
+      command: systemctl status zabbix-server
+      ignore_errors: true
+      register: zabbix_status
+      failed_when: zabbix_status.rc not in [0, 3, 4]
+
+    - name: Print Zabbix status
+      debug:
+        msg: "Zabbix is {{ 'active' if 'Active: active' in zabbix_status.stdout else 'not active' }}"
+      when: zabbix_status is defined
+
+    - name: Check Sensu service status
+      command: systemctl status sensu
+      ignore_errors: true
+      register: sensu_status
+      failed_when: sensu_status.rc not in [0, 3, 4]
+
+    - name: Print Sensu status
+      debug:
+        msg: "Sensu is {{ 'active' if 'Active: active' in sensu_status.stdout else 'not active' }}"
+      when: sensu_status is defined
+
+    - name: Check Icinga service status
+      command: systemctl status icinga2
+      ignore_errors: true
+      register: icinga_status
+      failed_when: icinga_status.rc not in [0, 3, 4]
+
+    - name: Print Icinga status
+      debug:
+        msg: "Icinga is {{ 'active' if 'Active: active' in icinga_status.stdout else 'not active' }}"
+      when: icinga_status is defined
+
 # Security services
     - name: Check Fail2ban service status
       command: systemctl status fail2ban
@@ -104,3 +192,47 @@
       debug:
         msg: "Fail2ban is {{ 'active' if 'Active: active' in fail2ban_status.stdout else 'not active' }}"
       when: fail2ban_status is defined
+
+    - name: Check OSSEC service status
+      shell: systemctl status ossec
+      register: ossec_status
+      changed_when: false
+      failed_when: ossec_status.rc not in [0, 3, 4]
+
+    - name: Print OSSEC status
+      debug:
+        msg: "OSSEC is {{ 'active' if 'Active: active' in ossec_status.stdout else 'not active' }}"
+      when: ossec_status is defined
+
+    - name: Check Tripwire service status
+      shell: systemctl status tripwire
+      register: tripwire_status
+      changed_when: false
+      failed_when: tripwire_status.rc not in [0, 3, 4]
+
+    - name: Print Tripwire status
+      debug:
+        msg: "Tripwire is {{ 'active' if 'Active: active' in tripwire_status.stdout else 'not active' }}"
+      when: tripwire_status is defined
+
+    - name: Check AppArmor service status
+      shell: systemctl status apparmor
+      register: apparmor_status
+      changed_when: false
+      failed_when: apparmor_status.rc not in [0, 3, 4]
+
+    - name: Print AppArmor status
+      debug:
+        msg: "AppArmor is {{ 'active' if 'Active: active' in apparmor_status.stdout else 'not active' }}"
+      when: apparmor_status is defined
+
+    - name: Check ClamAV service status
+      shell: systemctl status clamav
+      register: clamav_status
+      changed_when: false
+      failed_when: clamav_status.rc not in [0, 3, 4]
+
+    - name: Print ClamAV status
+      debug:
+        msg: "ClamAV is {{ 'active' if 'Active: active' in clamav_status.stdout else 'not active' }}"
+      when: clamav_status is defined
