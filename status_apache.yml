@@ -1,0 +1,16 @@
+---
+
+- name: Check if Apache2 is active on VMs
+  hosts: all
+  become: true
+  gather_facts: yes
+
+  tasks:
+    - name: Get Apache2 status
+      command: systemctl status apache2
+      register: apache2_status
+      changed_when: false
+
+    - name: Print status
+      debug:
+        msg: "Apache2 is {{ 'active' if 'Active: active' in apache2_status.stdout else 'not active' }}"
