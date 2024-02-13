@@ -1,0 +1,106 @@
+---
+- name: Playbook for checking status of services
+  hosts: all
+  become: true
+
+  tasks:
+
+# Application services
+    - name: Check Apache service status
+      command: systemctl status apache2
+      ignore_errors: yes
+      register: apache_status
+      no_log: true
+      changed_when: false
+      failed_when: apache_status.rc not in [0, 3, 4]
+
+    - name: Print Apache status
+      debug:
+        msg: "Apache is {{ 'active' if 'Active: active' in apache_status.stdout else 'not active' }}"
+      when: apache_status is defined
+
+    - name: Check Nginx service status
+      command: systemctl status nginx
+      ignore_errors: true
+      register: nginx_status
+      failed_when: nginx_status.rc not in [0, 3, 4]
+
+    - name: Print Nginx status
+      debug:
+        msg: "Nginx is {{ 'active' if 'Active: active' in nginx_status.stdout else 'not active' }}"
+      when: nginx_status is defined
+
+    - name: Check OpenSSH service status
+      command: systemctl status ssh
+      ignore_errors: true
+      register: ssh_status
+      failed_when: ssh_status.rc not in [0, 3, 4]
+
+    - name: Print OpenSSH status
+      debug:
+        msg: "OpenSSH is {{ 'active' if 'Active: active' in ssh_status.stdout else 'not active' }}"
+      when: ssh_status is defined
+
+    - name: Check Postfix service status
+      command: systemctl status postfix
+      ignore_errors: true
+      register: postfix_status
+      failed_when: postfix_status.rc not in [0, 3, 4]
+
+    - name: Print Postfix status
+      debug:
+        msg: "Postfix is {{ 'active' if 'Active: active' in postfix_status.stdout else 'not active' }}"
+      when: postfix_status is defined
+
+    - name: Check NFS service status
+      command: systemctl status nfs-server
+      ignore_errors: true
+      register: nfs_status
+      failed_when: nfs_status.rc not in [0, 3, 4]
+
+    - name: Print NFS status
+      debug:
+        msg: "NFS is {{ 'active' if 'Active: active' in nfs_status.stdout else 'not active' }}"
+      when: nfs_status is defined
+
+# Database services
+    - name: Check MySQL service status
+      command: systemctl status mysql
+      ignore_errors: yes
+      register: mysql_status
+      no_log: true
+      changed_when: false
+      failed_when: mysql_status.rc not in [0, 3, 4]
+
+    - name: Print MySQL status
+      debug:
+        msg: "MySQL is {{ 'active' if 'Active: active' in mysql_status.stdout else 'not active' }}"
+      when: mysql_status is defined
+
+# Monitoring services
+    - name: Check Prometheus service status
+      command: systemctl status prometheus
+      ignore_errors: yes
+      register: prometheus_status
+      no_log: true
+      changed_when: false
+      failed_when: prometheus_status.rc not in [0, 3, 4]
+
+    - name: Print Prometheus status
+      debug:
+        msg: "Prometheus is {{ 'active' if 'Active: active' in prometheus_status.stdout else 'not active' }}"
+      when: prometheus_status is defined
+
+# Security services
+    - name: Check Fail2ban service status
+      command: systemctl status fail2ban
+      ignore_errors: yes
+      register: fail2ban_status
+      no_log: true
+      changed_when: false
+      failed_when: fail2ban_status.rc not in [0, 3, 4]
+
+    - name: Print Fail2ban status
+      debug:
+        msg: "Fail2ban is {{ 'active' if 'Active: active' in fail2ban_status.stdout else 'not active' }}"
+      when: fail2ban_status is defined
